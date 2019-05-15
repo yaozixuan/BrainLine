@@ -26,10 +26,16 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    node.cpp \
+    drag_and_drop.cpp \
+    mouseevent.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    node.h \
+    drag_and_drop.h \
+    mouseevent.h
 
 FORMS += \
         mainwindow.ui
