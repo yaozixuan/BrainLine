@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    widgetcontrol.cpp \
+    logiccontrol.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    logiccontrol.h \
+    widgetcontrol.h
 
 FORMS += \
         mainwindow.ui
