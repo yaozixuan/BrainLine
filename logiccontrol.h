@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "node.h"
+#include "brainnode.h"
 #include "widgetcontrol.h"
 
 class LogicControl : public QObject

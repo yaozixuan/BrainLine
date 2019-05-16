@@ -30,14 +30,18 @@ SOURCES += \
     drag_and_drop.cpp \
     mouseevent.cpp \
     brainarc.cpp \
-    brainnode.cpp
+    brainnode.cpp \
+    logiccontrol.cpp \
+    widgetcontrol.cpp
 
 HEADERS += \
         mainwindow.h \
     drag_and_drop.h \
     mouseevent.h \
     brainarc.h \
-    brainnode.h
+    brainnode.h \
+    logiccontrol.h \
+    widgetcontrol.h
 
 FORMS += \
         mainwindow.ui
