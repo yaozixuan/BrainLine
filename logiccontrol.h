@@ -26,7 +26,7 @@ public slots:
 
 private:
 
-    Node *m_activeNode;
+    BrainNode *m_activeNode;
     std::map<int, void(LogicControl::*)(void)> m_memberMap;
 
 };
