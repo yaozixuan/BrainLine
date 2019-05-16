@@ -17,6 +17,8 @@ class LogicControl;
 
 class WidgetControl : public QGraphicsView
 {
+//    Q_OBJECT
+
 public:
     WidgetControl(MainWindow * parent = 0);
 
@@ -35,7 +37,7 @@ signals:
 
 protected:
 
-//    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void wheelEvent(QWheelEvent *event);
     void drawBackground(QPainter *painter, const QRectF &rect);
 

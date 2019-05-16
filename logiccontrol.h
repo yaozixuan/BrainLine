@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUndoStack>
 
-//#include "node.h"
+#include "node.h"
 #include "widgetcontrol.h"
 
 class LogicControl : public QObject
@@ -22,9 +22,11 @@ public slots:
 
     // commands from toolbars:
     void InsertNode();
-//    void RemoveNode();
+    void RemoveNode();
 
 private:
+
+    Node *m_activeNode;
     std::map<int, void(LogicControl::*)(void)> m_memberMap;
 
 };

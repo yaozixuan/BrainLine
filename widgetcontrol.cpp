@@ -3,7 +3,7 @@
 #include "mainwindow.h"
 #include <QGraphicsView>
 
-const QColor WidgetControl::m_paperColor(1,255,153); // Set background color
+const QColor WidgetControl::m_paperColor(248,248,255); // Set background color
 
 WidgetControl::WidgetControl(MainWindow *parent)
 //    : QGraphicsView(parent)
@@ -54,6 +54,28 @@ void WidgetControl::ZoomOut()
 
 //    scale(1 + factor, 1 + factor);
 //}
+
+void WidgetControl::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Insert){
+        m_logic->InsertNode();
+    }
+
+    if (event->key() == Qt::Key_Delete){
+        m_logic->RemoveNode();
+    }
+
+    if (event->key() == Qt::Key_Escape)
+    {
+        m_logic->nodeLostFocus();
+//        return true;
+    }
+    if (m_editingNode)
+    {
+        m_activeNode->keyPressEvent(event);
+//        return true;
+    }
+}
 
 void WidgetControl::drawBackground(QPainter *painter, const QRectF &rect)
 {
