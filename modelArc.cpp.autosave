@@ -1,0 +1,6 @@
+#include "modelarc.h"
+
+ModelArc::ModelArc()
+{
+
+}

@@ -1,0 +1,11 @@
+#ifndef MODELARC_H
+#define MODELARC_H
+
+
+class ModelArc
+{
+public:
+ModelArc();
+};
+
+#endif // MODEL_ARC_H

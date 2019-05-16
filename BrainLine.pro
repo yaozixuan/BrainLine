@@ -26,10 +26,18 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    drag_and_drop.cpp \
+    mouseevent.cpp \
+    brainarc.cpp \
+    brainnode.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    drag_and_drop.h \
+    mouseevent.h \
+    brainarc.h \
+    brainnode.h
 
 FORMS += \
         mainwindow.ui

@@ -1,0 +1,19 @@
+#ifndef MODEL_NODE
+#define MODEL_NODE
+
+#include <QGraphicsTextItem>
+#include <QTextCursor>
+#include<QGraphicsDropShadowEffect>
+
+#include "model_arc.h"
+
+class Node : public 
+
+
+
+
+
+
+
+
+#endif
