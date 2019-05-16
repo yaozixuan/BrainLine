@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUndoStack>
 
-#include "node.h"
+#include "brainnode.h"
 #include "widgetcontrol.h"
 
 class LogicControl : public QObject
@@ -26,7 +26,7 @@ public slots:
 
 private:
 
-    Node *m_activeNode;
+    BrainNode *m_activeNode;
     std::map<int, void(LogicControl::*)(void)> m_memberMap;
 
 };

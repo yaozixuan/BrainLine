@@ -33,8 +33,6 @@ public:
     //change arc connection when node objects change
     void changePos();
 
-    bool childNode() const;
-    void setChildNode(const bool& child = true);
 
 protected:
     //return the bounding area for arcs where that could be drawn upon
@@ -61,8 +59,6 @@ private:
     //BrainNode width
     qreal m_width;
 
-    //assign logical and temporal connection between start and end nodes;
-    bool m_child;
     //const arrow size
     static const qreal m_arrowSize;
     static const double m_pi;
