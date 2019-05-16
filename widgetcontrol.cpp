@@ -65,16 +65,16 @@ void WidgetControl::keyPressEvent(QKeyEvent *event)
         m_logic->RemoveNode();
     }
 
-    if (event->key() == Qt::Key_Escape)
-    {
-        m_logic->nodeLostFocus();
-//        return true;
-    }
-    if (m_editingNode)
-    {
-        m_activeNode->keyPressEvent(event);
-//        return true;
-    }
+//    if (event->key() == Qt::Key_Escape)
+//    {
+//        m_logic->NodeLostFocus();
+////        return true;
+//    }
+//    if (m_editingNode)
+//    {
+//        m_activeNode->keyPressEvent(event);
+////        return true;
+//    }
 }
 
 void WidgetControl::drawBackground(QPainter *painter, const QRectF &rect)
