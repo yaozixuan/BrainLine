@@ -1,5 +1,5 @@
 #include "mouseevent.h"
-#include "node.h"
+#include "brainnode.h"
 
 
 MouseEvent::MouseEvent()

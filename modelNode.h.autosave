@@ -1,0 +1,32 @@
+#ifndef MODELNODE
+#define MODELNODE
+
+#include <QGraphicsTextItem>
+#include <QTextCursor>
+#include<QGraphicsDropShadowEffect>
+
+#include "modelarc.h"
+
+class ModelNode : public QGraphicsItem {
+    Q_OBJECT
+public:
+    ModelNode(/* graphlogic*/); // the underlying is the graphlogic
+    ~ModelNode();
+    
+    //connect with different nodes with arcs
+    void addArc(ModelArc* arc, ModelNode* start); // need to start from this node
+    void deleteArc
+        
+protected:
+private:
+    
+};
+
+
+
+
+
+
+
+
+#endif
