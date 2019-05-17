@@ -4,8 +4,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "graphwidget.h" //改
-#include "graphlogic.h" //改
+//#include "graphwidget.h" //改
+//#include "graphlogic.h" //改
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_contentChanged(false)
 {
     // setup ui
-    ui->setupUi(this)
+    ui->setupUi(this);
     connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
