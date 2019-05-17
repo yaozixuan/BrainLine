@@ -28,7 +28,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     drag_and_drop.cpp \
-    mouseevent.cpp \
     brainarc.cpp \
     brainnode.cpp \
     logiccontrol.cpp \
@@ -37,7 +36,6 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     drag_and_drop.h \
-    mouseevent.h \
     brainarc.h \
     brainnode.h \
     logiccontrol.h \
@@ -51,5 +49,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    logo.jpg
+DISTFILES +=
+
+RESOURCES += \
+    brainline.qrc
