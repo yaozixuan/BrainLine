@@ -12,13 +12,13 @@ class LogicControl;
 struct UndoContext
 {
     LogicControl *m_graphLogic;
-    Node *m_activeNode;
-    Node *m_hintNode;
-    QList <Node *> *m_nodeList;
+    BrainNode *m_activeNode;
+    BrainNode *m_hintNode;
+    QList <BrainNode *> *m_nodeList;
     QPointF m_pos;
     QColor m_color;
-    Node *m_source;
-    Node *m_destination;
+    BrainNode *m_source;
+    BrainNode *m_destination;
     bool m_secondary;
     qreal m_x;
     qreal m_y;
@@ -26,13 +26,13 @@ struct UndoContext
     qreal m_scale;
 
     UndoContext(LogicControl *graphLogic = 0,
-                Node *activeNode = 0,
-                Node *hintNode = 0,
-                QList <Node *> *nodeList = 0,
+                BrainNode *activeNode = 0,
+                BrainNode *hintNode = 0,
+                QList <BrainNode *> *nodeList = 0,
                 QPointF pos = QPointF(),
                 QColor color = QColor(),
-                Node *source = 0,
-                Node *destination = 0,
+                BrainNode *source = 0,
+                BrainNode *destination = 0,
                 bool secondary = false,
                 qreal x = 0,
                 qreal y = 0,
@@ -70,8 +70,8 @@ protected:
 
     bool m_done;
     UndoContext m_context;
-    Node *m_activeNode;
-    QList <Node *> m_nodeList;
+    BrainNode *m_activeNode;
+    QList <BrainNode *> m_nodeList;
     bool m_subtree;
 };
 
@@ -89,8 +89,8 @@ public:
 
 private:
 
-    Node *m_node;
-    Edge *m_edge;
+    BrainNode *m_node;
+    BrainArc *m_edge;
 };
 
 class RemoveNodeCommand : public BaseUndoClass
@@ -105,8 +105,8 @@ public:
 
 private:
 
-    Node *m_hintNode;
-    QList <Edge *> m_edgeList;
+    BrainNode *m_hintNode;
+    QList <BrainArc *> m_edgeList;
 };
 
 class AddEdgeCommand : public BaseUndoClass
@@ -122,7 +122,7 @@ public:
 
 private:
 
-    Edge *m_edge;
+    BrainArc *m_edge;
 };
 
 class RemoveEdgeCommand : public BaseUndoClass
@@ -137,7 +137,7 @@ public:
 
 private:
 
-    Edge *m_edge;
+    BrainArc *m_edge;
 };
 
 class MoveCommand : public BaseUndoClass
@@ -166,7 +166,7 @@ public:
 
 private:
 
-    QMap<Node*, QColor> m_colorMap;
+    QMap<BrainNode*, QColor> m_colorMap;
 };
 
 class NodeTextColorCommand : public BaseUndoClass
@@ -181,7 +181,7 @@ public:
 
 private:
 
-    QMap<Node*, QColor> m_colorMap;
+    QMap<BrainNode*, QColor> m_colorMap;
 };
 
 class ScaleNodeCommand : public BaseUndoClass

@@ -6,8 +6,7 @@
 #include <QSignalMapper>
 #include <QUndoView>
 
-//#include "graphwidget.h"
-class WidgetControl; //改
+class WidgetControl;
 
 namespace Ui {
 class MainWindow;

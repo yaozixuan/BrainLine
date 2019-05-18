@@ -48,9 +48,9 @@
     <addaction name="actionClose"/>
     <addaction name="actionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuView">
+   <widget class="QMenu" name="menuTool">
     <property name="title">
-     <string>View</string>
+     <string>Tool</string>
     </property>
     <addaction name="separator"/>
     <addaction name="actionZoom_In"/>
@@ -65,7 +65,7 @@
     <addaction name="actionHelp_Information"/>
    </widget>
    <addaction name="menuBrainLine"/>
-   <addaction name="menuView"/>
+   <addaction name="menuTool"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionNew">

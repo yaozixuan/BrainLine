@@ -3,27 +3,25 @@
 #include <QGraphicsItem>
 //#include <iostream>
 
-class Node;
+class BrainNode;
 
 // directed arrow
-class Edge : public QGraphicsItem
+class BrainArc : public QGraphicsItem
 {
 public:
 
-    Edge(Node *sourceNode, Node *destNode);
-    ~Edge();
+    BrainArc(BrainNode *sourceNode, BrainNode *destNode);
+    ~BrainArc();
 
-    Node *sourceNode() const;
-    Node *destNode() const;
+    BrainNode *sourceNode() const;
+    BrainNode *destNode() const;
     double angle() const;
 
-    // set/get color/width/secondary
+    // set/get color/width
     QColor color() const;
     void setColor(const QColor &color);
     qreal width() const;
     void setWidth(const qreal &width);
-    bool secondary() const;
-    void setSecondary(const bool &sec = true );
 
     // re-calculates the source and endpoint.
     // called when the source/dest node changed (size,pos)
@@ -38,8 +36,8 @@ protected:
 
 private:
 
-    Node *m_sourceNode;
-    Node *m_destNode;
+    BrainNode *m_sourceNode;
+    BrainNode *m_destNode;
 
     QPointF m_sourcePoint;
     QPointF m_destPoint;
@@ -49,7 +47,6 @@ private:
 
     // just a logical connection between two nodes,
     // does not counts at subtree calculation
-    bool m_secondary;
 
     static const qreal m_arrowSize;
     static const double m_pi;

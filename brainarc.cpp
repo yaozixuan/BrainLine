@@ -7,17 +7,16 @@
 
 #include <math.h>
 
-const double Edge::m_pi = 3.14159265358979323846264338327950288419717;
-const double Edge::m_twoPi = 2.0 * Edge::m_pi;
-const qreal Edge::m_arrowSize = 7;
+const double BrainArc::m_pi = 3.14159265358979323846264338327950288419717;
+const double BrainArc::m_twoPi = 2.0 * BrainArc::m_pi;
+const qreal BrainArc::m_arrowSize = 7;
 
-Edge::Edge(Node *sourceNode, Node *destNode)
+BrainArc::BrainArc(BrainNode *sourceNode, BrainNode *destNode)
     : m_sourceNode(sourceNode)
     , m_destNode(destNode)
     , m_angle(-1)
     , m_color(0,0,0)
     , m_width(1)
-    , m_secondary(false)
 {
     // does not interact with user
     setAcceptedMouseButtons(0);
@@ -26,44 +25,44 @@ Edge::Edge(Node *sourceNode, Node *destNode)
     adjust();
 }
 
-Edge::~Edge()
+BrainArc::~BrainArc()
 {
     m_sourceNode->removeEdge(this);
     m_destNode->removeEdge(this);
 }
 
-Node * Edge::sourceNode() const
+BrainNode * BrainArc::sourceNode() const
 {
     return m_sourceNode;
 }
 
-Node * Edge::destNode() const
+BrainNode * BrainArc::destNode() const
 {
     return m_destNode;
 }
 
-double Edge::angle() const
+double BrainArc::angle() const
 {
     return m_angle;
 }
 
-QColor Edge::color() const
+QColor BrainArc::color() const
 {
     return m_color;
 }
 
-void Edge::setColor(const QColor &color)
+void BrainArc::setColor(const QColor &color)
 {
     m_color = color;
     update();
 }
 
-qreal Edge::width() const
+qreal BrainArc::width() const
 {
     return m_width;
 }
 
-void Edge::setWidth(const qreal &width)
+void BrainArc::setWidth(const qreal &width)
 {
     if (width < 1 || width > 100)
         return;
@@ -72,18 +71,7 @@ void Edge::setWidth(const qreal &width)
     update();
 }
 
-bool Edge::secondary() const
-{
-    return m_secondary;
-}
-
-void Edge::setSecondary(const bool &sec)
-{
-    m_secondary = sec;
-    update();
-}
-
-void Edge::adjust()
+void BrainArc::adjust()
 {
     prepareGeometryChange();
 
@@ -94,7 +82,7 @@ void Edge::adjust()
     m_sourcePoint = m_sourceNode->sceneBoundingRect().center();
 }
 
-QRectF Edge::boundingRect() const
+QRectF BrainArc::boundingRect() const
 {
     if (!m_sourceNode || !m_destNode)
         return QRectF();
@@ -109,7 +97,7 @@ QRectF Edge::boundingRect() const
                                                    extra, extra);
 }
 
-void Edge::paint(QPainter *painter,
+void BrainArc::paint(QPainter *painter,
                  const QStyleOptionGraphicsItem *,
                  QWidget *w)
 {
@@ -120,20 +108,14 @@ void Edge::paint(QPainter *painter,
 
     m_angle = ::acos(line.dx() / line.length());
     if (line.dy() >= 0)
-        m_angle = Edge::m_twoPi - m_angle;
+        m_angle = BrainArc::m_twoPi - m_angle;
 
     // no need to draw when the nodes overlap
     if (sourceNode()->collidesWithItem(destNode()))
         return;
 
-    // Draw the line itself - if secondary then dashline
-    painter->setPen(QPen(m_color,
-                         m_width,
-                         m_secondary ?
-                             Qt::DashLine :
-                             Qt::SolidLine,
-                         Qt::RoundCap,
-                         Qt::RoundJoin));
+    // Draw the line itself
+    painter->setPen(QPen(m_color, m_width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
 
     if (line.length() < m_arrowSize)
@@ -157,11 +139,11 @@ void Edge::paint(QPainter *painter,
     }
 
     QPointF destArrowP1 = m_destPoint +
-                          QPointF(sin(m_angle - Edge::m_pi / 3) * arrowSize,
-                                  cos(m_angle - Edge::m_pi / 3) * arrowSize);
+                          QPointF(sin(m_angle - BrainArc::m_pi / 3) * arrowSize,
+                                  cos(m_angle - BrainArc::m_pi / 3) * arrowSize);
     QPointF destArrowP2 = m_destPoint +
-              QPointF(sin(m_angle - Edge::m_pi + Edge::m_pi / 3) * arrowSize,
-                      cos(m_angle - Edge::m_pi + Edge::m_pi / 3) * arrowSize);
+              QPointF(sin(m_angle - BrainArc::m_pi + BrainArc::m_pi / 3) * arrowSize,
+                      cos(m_angle - BrainArc::m_pi + BrainArc::m_pi / 3) * arrowSize);
 
 
     painter->drawPolygon(QPolygonF() << line.p2()

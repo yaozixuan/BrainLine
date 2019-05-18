@@ -4,8 +4,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "widgetcontrol.h" //改
-#include "logiccontrol.h" //改
+#include "widgetcontrol.h"
+#include "logiccontrol.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -319,17 +319,17 @@ void MainWindow::setupEditToolbar()
         m_undo->setShortcuts(QKeySequence::Undo);
         m_redo = m_undoStack->createRedoAction(this, tr("&Redo"));
         m_redo->setShortcuts(QKeySequence::Redo);
-        ui->menuView->addAction(m_undo);
-        ui->menuView->addAction(m_redo);
+        ui->menuTool->addAction(m_undo);
+        ui->menuTool->addAction(m_redo);
 
-        ui->menuView->addSeparator();
+        ui->menuTool->addSeparator();
 
         m_undoToolbar = new QAction(tr("undo toolbar"), this);
         m_undoToolbar->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
         connect(m_undoToolbar, SIGNAL(triggered()),
                 this, SLOT (showUndoToolbar()));
 
-        ui->menuView->addAction(m_undoToolbar);
+        ui->menuTool->addAction(m_undoToolbar);
 
         m_graphicsView->logicControl()->setUndoStack(m_undoStack);
 }

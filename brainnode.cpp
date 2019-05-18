@@ -7,16 +7,16 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QTextDocument>
 
-const QPointF Node::newNodeCenter = QPointF(4, 11.5);
-const QPointF Node::newNodeBottomRigth = QPointF(8, 23);
+const QPointF BrainNode::newNodeCenter = QPointF(4, 11.5);
+const QPointF BrainNode::newNodeBottomRigth = QPointF(8, 23);
 
-const double Node::m_pi = 3.14159265358979323846264338327950288419717;
-const double Node::m_oneAndHalfPi = Node::m_pi * 3.5;
-const double Node::m_twoPi = Node::m_pi * 2.0;
+const double BrainNode::m_pi = 3.14159265358979323846264338327950288419717;
+const double BrainNode::m_oneAndHalfPi = BrainNode::m_pi * 3.5;
+const double BrainNode::m_twoPi = BrainNode::m_pi * 2.0;
 
-const QColor Node::m_gold(255,215,0);
+const QColor BrainNode::m_gold(255,215,0);
 
-Node::Node(LogicControl *graphLogic)
+BrainNode::BrainNode(LogicControl *graphLogic)
     : m_graphLogic(graphLogic)
     , m_number(-1)
     , m_hasBorder(false)
@@ -35,18 +35,18 @@ Node::Node(LogicControl *graphLogic)
     m_effect->setOffset(qreal(4.0));
 }
 
-Node::~Node()
+BrainNode::~BrainNode()
 {
     deleteEdges();
 }
 
-void Node::addEdge(Edge *edge, bool startsFromThisNode)
+void BrainNode::addEdge(BrainArc *edge, bool startsFromThisNode)
 {
     m_edgeList.push_back(EdgeElement(edge, startsFromThisNode));
     edge->adjust();
 }
 
-void Node::deleteEdge(Node *otherEnd)
+void BrainNode::deleteEdge(BrainNode *otherEnd)
 {
     for(QList<EdgeElement>::iterator it = m_edgeList.begin();
         it != m_edgeList.end(); it++)
@@ -62,7 +62,7 @@ void Node::deleteEdge(Node *otherEnd)
     }
 }
 
-void Node::deleteEdges()
+void BrainNode::deleteEdges()
 {
 //    foreach (EdgeElement element, m_edgeList)
 //        delete element.edge;
@@ -73,7 +73,7 @@ void Node::deleteEdges()
     }
 }
 
-void Node::removeEdge(Edge *edge)
+void BrainNode::removeEdge(BrainArc *edge)
 {
     for(QList<EdgeElement>::iterator it = m_edgeList.begin();
         it != m_edgeList.end(); it++)
@@ -95,9 +95,9 @@ void Node::removeEdge(Edge *edge)
 //    }
 //}
 
-QList<Edge *> Node::edges() const
+QList<BrainArc *> BrainNode::edges() const
 {
-    QList<Edge *> list;
+    QList<BrainArc *> list;
 
 //    foreach(EdgeElement element, m_edgeList)
 //        list.push_back(element.edge);
@@ -111,33 +111,31 @@ QList<Edge *> Node::edges() const
 }
 
 // edges from this Node. Exclude secondaries if needed (calc subtree)
-QList<Edge *> Node::edgesFrom(const bool &excludeSecondaries) const
+QList<BrainArc *> BrainNode::edgesFrom(const bool &excludeSecondaries) const
 {
-    QList<Edge *> list;
+    QList<BrainArc *> list;
 
     foreach(EdgeElement element, m_edgeList)
-        if (element.startsFromThisNode &&
-                (!element.edge->secondary() || !excludeSecondaries))
+        if (element.startsFromThisNode && !excludeSecondaries)
             list.push_back(element.edge);
 
     return list;
 }
 
 // edges to this node (max 1 primary and any number of secondaries)
-QList<Edge *> Node::edgesToThis(const bool &excludeSecondaries) const
+QList<BrainArc *> BrainNode::edgesToThis(const bool &excludeSecondaries) const
 {
-    QList<Edge *> list;
+    QList<BrainArc *> list;
 
     foreach(EdgeElement element, m_edgeList)
-        if (!element.startsFromThisNode &&
-                (!element.edge->secondary() || !excludeSecondaries))
+        if (!element.startsFromThisNode && !excludeSecondaries)
             list.push_back(element.edge);
 
     return list;
 }
 
 // the edge from this Node to the parameter Node
-Edge * Node::edgeTo(const Node *node) const
+BrainArc * BrainNode::edgeTo(const BrainNode *node) const
 {
     foreach(EdgeElement element, m_edgeList)
         if ((element.edge->sourceNode() == node  ||
@@ -147,33 +145,8 @@ Edge * Node::edgeTo(const Node *node) const
     return 0;
 }
 
-//QList<Node *> Node::subtree() const
-//{
-//    /** @note QList crashes if modified while traversal,
-//      * QMutableListIterator lacks push_back, using good old std::list
-//      */
-
-//    std::list<Node *> list;
-//    list.push_back(const_cast<Node *>(this));
-
-//    // inorder: push_back the list of children Nodes of iterator
-//    for(std::list<Node *>::const_iterator it = list.begin();
-//        it != list.end();
-//        it++)
-//    {
-//        QList<Edge *> edges = (*it)->edgesFrom();
-//        foreach(Edge *edge, edges)
-//            if (!edge->secondary())
-//                list.push_back( edge->destNode() != this ?
-//                                   edge->destNode():
-//                                   edge->sourceNode());
-//    }
-
-//    return QList<Node *>::fromStdList(list);
-//}
-
 // return thue if this and the parameter Node is connected with an edge
-bool Node::isConnected(const Node *node) const
+bool BrainNode::isConnected(const BrainNode *node) const
 {
     foreach (EdgeElement element, m_edgeList)
         if (element.edge->sourceNode() == node ||
@@ -183,7 +156,7 @@ bool Node::isConnected(const Node *node) const
     return false;
 }
 
-void Node::setBorder(const bool &hasBorder)
+void BrainNode::setBorder(const bool &hasBorder)
 {
    m_hasBorder = hasBorder;
    m_effect->setEnabled(hasBorder);
@@ -191,7 +164,7 @@ void Node::setBorder(const bool &hasBorder)
    update();
 }
 
-void Node::setEditable(const bool &editable)
+void BrainNode::setEditable(const bool &editable)
 {
     if (!editable)
     {
@@ -207,29 +180,29 @@ void Node::setEditable(const bool &editable)
     setTextCursor(c);
 }
 
-void Node::setColor(const QColor &color)
+void BrainNode::setColor(const QColor &color)
 {
     m_color = color;
     update();
 }
 
-QColor Node::color() const
+QColor BrainNode::color() const
 {
     return m_color;
 }
 
-void Node::setTextColor(const QColor &color)
+void BrainNode::setTextColor(const QColor &color)
 {
     m_textColor = color;
     update();
 }
 
-QColor Node::textColor() const
+QColor BrainNode::textColor() const
 {
     return m_textColor;
 }
 
-void Node::setScale(const qreal &factor,const QRectF &sceneRect)
+void BrainNode::setScale(const qreal &factor,const QRectF &sceneRect)
 {
     // cannot scale out the Node from the scene
     if (!sceneRect.contains(pos() +
@@ -249,7 +222,7 @@ void Node::setScale(const qreal &factor,const QRectF &sceneRect)
     }
 }
 
-void Node::showNumber(const int &number,
+void BrainNode::showNumber(const int &number,
                       const bool& show,
                       const bool &numberIsSpecial)
 {
@@ -258,7 +231,7 @@ void Node::showNumber(const int &number,
     update();
 }
 
-void Node::insertPicture(const QString &picture)
+void BrainNode::insertPicture(const QString &picture)
 {
     QTextCursor c = textCursor();
 
@@ -270,7 +243,7 @@ void Node::insertPicture(const QString &picture)
     emit nodeChanged();
 }
 
-QPointF Node::intersection(const QLineF &line, const bool &reverse) const
+QPointF BrainNode::intersection(const QLineF &line, const bool &reverse) const
 {
 
     /// @note What a pity, the following does not work,
@@ -305,17 +278,17 @@ QPointF Node::intersection(const QLineF &line, const bool &reverse) const
     return QPointF(0,0);
 }
 
-double Node::calculateBiggestAngle() const
+double BrainNode::calculateBiggestAngle() const
 {
     // in no edge, return with 12 o'clock
     if (m_edgeList.empty())
-        return Node::m_oneAndHalfPi;
+        return BrainNode::m_oneAndHalfPi;
 
     // if there is only one edge, return with it's extension
     if (m_edgeList.size()==1)
         return m_edgeList.first().startsFromThisNode ?
-                    Node::m_pi - m_edgeList.first().edge->angle() :
-                    Node::m_twoPi - m_edgeList.first().edge->angle();
+                    BrainNode::m_pi - m_edgeList.first().edge->angle() :
+                    BrainNode::m_twoPi - m_edgeList.first().edge->angle();
 
     // put angles of every edges from this node to a list
     QList<double> tmp;
@@ -324,14 +297,14 @@ double Node::calculateBiggestAngle() const
     {
         tmp.push_back(it->startsFromThisNode ?
                  it->edge->angle() :
-                 doubleModulo(Node::m_pi + it->edge->angle(), Node::m_twoPi));
+                 doubleModulo(BrainNode::m_pi + it->edge->angle(), BrainNode::m_twoPi));
     }
     qSort(tmp.begin(), tmp.end());
 
     // find the biggest diffrence, store prev angle
     double prev(tmp.first());
     double max_prev(tmp.last());
-    double max(Node::m_twoPi - tmp.last() + tmp.first());
+    double max(BrainNode::m_twoPi - tmp.last() + tmp.first());
 
     for(QList<double>::const_iterator it = ++tmp.begin(); it!=tmp.end(); it++)
     {
@@ -344,10 +317,10 @@ double Node::calculateBiggestAngle() const
     }
 
     // return with prev angle + max diff / 2
-    return Node::m_twoPi - doubleModulo(max_prev + max / 2, Node::m_twoPi);
+    return BrainNode::m_twoPi - doubleModulo(max_prev + max / 2, BrainNode::m_twoPi);
 }
 
-void Node::keyPressEvent(QKeyEvent *event)
+void BrainNode::keyPressEvent(QKeyEvent *event)
 {
     // cursor movements
     switch (event->key()) {
@@ -399,7 +372,7 @@ void Node::keyPressEvent(QKeyEvent *event)
     ///@note leaving editing mode is done with esc, handled by graphwidget
 }
 
-void Node::paint(QPainter *painter,
+void BrainNode::paint(QPainter *painter,
                  const QStyleOptionGraphicsItem *option,
                  QWidget *w)
 {
@@ -439,7 +412,7 @@ void Node::paint(QPainter *painter,
     }
 }
 
-QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant BrainNode::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     switch (change) {
 
@@ -479,7 +452,7 @@ QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
     return QGraphicsItem::itemChange(change, value);
 }
 
-void Node::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void BrainNode::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -489,26 +462,26 @@ void Node::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event);
 }
 
-void Node::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+void BrainNode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
 
     emit nodeEdited();
 }
 
-void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void BrainNode::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
 // notify parent so subtree can be moved too if necessary
-void Node::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void BrainNode::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QPointF diff(event->scenePos() - event->lastScenePos());
     m_graphLogic->moveNode(diff.x(), diff.y());
 }
 
-QPainterPath Node::shape () const
+QPainterPath BrainNode::shape () const
 {
     QPainterPath path;
     path.addRoundedRect(boundingRect(), 20.0, 15.0);
@@ -516,7 +489,7 @@ QPainterPath Node::shape () const
 }
 
 // leave editing mode when user clicks on the view elsewhere for example
-void Node::focusOutEvent(QFocusEvent *event)
+void BrainNode::focusOutEvent(QFocusEvent *event)
 {
     Q_UNUSED(event);
     setEditable(false);
@@ -525,7 +498,7 @@ void Node::focusOutEvent(QFocusEvent *event)
 }
 
 // there is no such thing as modulo operator for double :P
-double Node::doubleModulo(const double &devided, const double &devisor) const
+double BrainNode::doubleModulo(const double &devided, const double &devisor) const
 {
     return devided - static_cast<double>(devisor * static_cast<int>(devided
                                                                   / devisor));

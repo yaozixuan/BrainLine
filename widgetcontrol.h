@@ -55,7 +55,7 @@ private:
 
     MainWindow *m_parent;
     QGraphicsScene *m_scene;
-    LogicControl *m_graphlogic;
+    LogicControl *m_logic;
 
     QMenu *m_RightMenu;
     QAction *m_AddNode;

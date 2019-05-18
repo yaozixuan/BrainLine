@@ -1,5 +1,5 @@
 #include "command.h"
-#include "brainnode.h" //改
+#include "brainnode.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -30,7 +30,7 @@ InsertNodeCommand::InsertNodeCommand(UndoContext context)
     m_node->setHtml(QString(""));
 
     // new edge inherits colors and size from target
-    m_edge = new Edge(m_activeNode, m_node);
+    m_edge = new BrainArc(m_activeNode, m_node);
     m_edge->setColor(m_node->color());
     m_edge->setWidth(m_node->scale()*2 + 1);
 }
@@ -85,8 +85,8 @@ RemoveNodeCommand::RemoveNodeCommand(UndoContext context)
     setText(QObject::tr("Node removed"));
 
     // collect affected edges
-    foreach(Node *node, m_nodeList)
-        foreach(Edge *edge, node->edges())
+    foreach(BrainNode *node, m_nodeList)
+        foreach(BrainArc *edge, node->edges())
             if (m_edgeList.indexOf(edge) == -1)
                 m_edgeList.push_back(edge);
 }
@@ -94,14 +94,14 @@ RemoveNodeCommand::RemoveNodeCommand(UndoContext context)
 void RemoveNodeCommand::undo()
 {
     // add nodes
-    foreach (Node *node, m_nodeList)
+    foreach (BrainNode *node, m_nodeList)
     {
         m_context.m_graphLogic->graphWidget()->scene()->addItem(node);
         m_context.m_nodeList->append(node);
     }
 
     // add edges
-    foreach (Edge *edge, m_edgeList)
+    foreach (BrainArc *edge, m_edgeList)
     {
         edge->sourceNode()->addEdge(edge,true);
         edge->destNode()->addEdge(edge,false);
@@ -113,13 +113,13 @@ void RemoveNodeCommand::undo()
 
 void RemoveNodeCommand::redo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
     {
         m_context.m_nodeList->removeAll(node);
         m_context.m_graphLogic->graphWidget()->scene()->removeItem(node);
     }
 
-    foreach(Edge *edge, m_edgeList)
+    foreach(BrainArc *edge, m_edgeList)
     {
         edge->sourceNode()->removeEdge(edge);
         edge->destNode()->removeEdge(edge);
@@ -134,7 +134,7 @@ AddEdgeCommand::AddEdgeCommand(UndoContext context)
 {
     setText(QObject::tr("New Arc added"));
 
-    m_edge = new Edge(m_context.m_source, m_context.m_destination);
+    m_edge = new BrainArc(m_context.m_source, m_context.m_destination);
     m_edge->setColor(m_context.m_destination->color());
     m_edge->setWidth(m_context.m_destination->scale()*2 + 1);
 }
@@ -200,7 +200,7 @@ MoveCommand::MoveCommand(UndoContext context)
 
 void MoveCommand::undo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         node->moveBy(-m_context.m_x, -m_context.m_y);
 
     m_context.m_graphLogic->setActiveNode(m_activeNode);
@@ -208,7 +208,7 @@ void MoveCommand::undo()
 
 void MoveCommand::redo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         node->moveBy(m_context.m_x, m_context.m_y);
 
     m_context.m_graphLogic->setActiveNode(m_activeNode);
@@ -246,16 +246,16 @@ NodeColorCommand::NodeColorCommand(UndoContext context)
     : BaseUndoClass(context)
 {
     setText(QObject::tr("Change Node Color"));
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         m_colorMap[node] = node->color();
 }
 
 void NodeColorCommand::undo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
     {
         node->setColor(m_colorMap[node]);
-        foreach (Edge * edge, node->edgesToThis(false))
+        foreach (BrainArc * edge, node->edgesToThis(false))
             edge->setColor(m_colorMap[node]);
     }
 
@@ -264,10 +264,10 @@ void NodeColorCommand::undo()
 
 void NodeColorCommand::redo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
     {
         node->setColor(m_context.m_color);
-        foreach (Edge * edge, node->edgesToThis(false))
+        foreach (BrainArc * edge, node->edgesToThis(false))
             edge->setColor(m_context.m_color);
     }
 
@@ -278,13 +278,13 @@ NodeTextColorCommand::NodeTextColorCommand(UndoContext context)
     : BaseUndoClass(context)
 {
     setText(QObject::tr("Change Text Color"));
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         m_colorMap[node] = node->textColor();
 }
 
 void NodeTextColorCommand::undo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         node->setTextColor(m_colorMap[node]);
 
     m_context.m_graphLogic->setActiveNode(m_activeNode);
@@ -292,7 +292,7 @@ void NodeTextColorCommand::undo()
 
 void NodeTextColorCommand::redo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         node->setTextColor(m_context.m_color);
 
     m_context.m_graphLogic->setActiveNode(m_activeNode);
@@ -306,7 +306,7 @@ ScaleNodeCommand::ScaleNodeCommand(UndoContext context)
 
 void ScaleNodeCommand::undo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         node->setScale(qreal(-m_context.m_scale), m_context.m_graphLogic->graphWidget()->sceneRect());
 
     m_context.m_graphLogic->setActiveNode(m_activeNode);
@@ -314,7 +314,7 @@ void ScaleNodeCommand::undo()
 
 void ScaleNodeCommand::redo()
 {
-    foreach(Node *node, m_nodeList)
+    foreach(BrainNode *node, m_nodeList)
         node->setScale(m_context.m_scale, m_context.m_graphLogic->graphWidget()->sceneRect());
 
     m_context.m_graphLogic->setActiveNode(m_activeNode);

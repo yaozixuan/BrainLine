@@ -8,30 +8,30 @@
 #include "brainarc.h"
 class LogicControl;
 
-class Node : public QGraphicsTextItem
+class BrainNode : public QGraphicsTextItem
 {
     Q_OBJECT
 
 public:
 
-    Node(LogicControl *graphLogic);
-    ~Node();
+    BrainNode(LogicControl *graphLogic);
+    ~BrainNode();
 
     // add/remove edges
-    void addEdge(Edge *edge, bool startsFromThisNode);
-    void deleteEdge(Node *otherEnd);
+    void addEdge(BrainArc *edge, bool startsFromThisNode);
+    void deleteEdge(BrainNode *otherEnd);
     void deleteEdges();
-    void removeEdge(Edge *edge);
+    void removeEdge(BrainArc *edge);
     void removeEdges();
 
 
     // graph traversal
-    QList<Edge *> edges() const;
-    QList<Edge *> edgesFrom(const bool &excludeSecondaries = true) const;
-    QList<Edge *> edgesToThis(const bool &excludeSecondaries = true) const;
-    Edge * edgeTo(const Node* node) const;
-    QList<Node *> subtree() const;
-    bool isConnected(const Node *node) const;
+    QList<BrainArc *> edges() const;
+    QList<BrainArc *> edgesFrom(const bool &excludeSecondaries = true) const;
+    QList<BrainArc *> edgesToThis(const bool &excludeSecondaries = true) const;
+    BrainArc * edgeTo(const BrainNode* node) const;
+    QList<BrainNode *> subtree() const;
+    bool isConnected(const BrainNode *node) const;
 
     // prop set/get
     void setBorder(const bool &hasBorder = true);
@@ -87,9 +87,9 @@ private:
 
     struct EdgeElement
     {
-        Edge *edge;
+        BrainArc *edge;
         bool startsFromThisNode;
-        EdgeElement(Edge *e, bool s) : edge(e), startsFromThisNode(s) {}
+        EdgeElement(BrainArc *e, bool s) : edge(e), startsFromThisNode(s) {}
     };
 
 
