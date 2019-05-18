@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,19 +27,19 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    drag_and_drop.cpp \
     brainarc.cpp \
     brainnode.cpp \
     logiccontrol.cpp \
-    widgetcontrol.cpp
+    widgetcontrol.cpp \
+    command.cpp
 
 HEADERS += \
         mainwindow.h \
-    drag_and_drop.h \
     brainarc.h \
     brainnode.h \
     logiccontrol.h \
-    widgetcontrol.h
+    widgetcontrol.h \
+    command.h
 
 FORMS += \
         mainwindow.ui

@@ -4,8 +4,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
-//#include "graphwidget.h" //改
-//#include "graphlogic.h" //改
+#include "widgetcontrol.h" //改
+#include "logiccontrol.h" //改
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,19 +28,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionHelp_Information, SIGNAL(triggered()), this, SLOT(help()));
 
     // graphwidget is hided by def, new/open file will show it
-    m_graphicsView = new GraphWidget(this);
+    m_graphicsView = new WidgetControl(this);
     setCentralWidget(m_graphicsView);
     m_graphicsView->hide();
 
     // Connect controller to detect content change
-    connect(m_graphicsView->graphLogic(), SIGNAL(contentChanged(const bool&)),
+    connect(m_graphicsView->logicControl(), SIGNAL(contentChanged(const bool&)),
             this, SLOT(contentChanged(const bool&)));
 
     // Show notification message on Status Bar
     connect(m_graphicsView, SIGNAL(notification(QString)),
             this, SLOT(statusBarMsg(QString)));
 
-    connect(m_graphicsView->graphLogic(), SIGNAL(notification(QString)),
+    connect(m_graphicsView->logicControl(), SIGNAL(notification(QString)),
             this, SLOT(statusBarMsg(QString)));
 
 
@@ -90,7 +90,7 @@ void MainWindow::newFile()    //open a new widget, set the options' states. give
     m_graphicsView->newScene();
 
     ui->actionSave->setEnabled(false);
-    ui->actionSaveAs->setEnabled(true);
+    ui->actionSave_as->setEnabled(true);
     ui->actionClose->setEnabled(true);
     ui->actionExport->setEnabled(true);
     contentChanged(false);
@@ -130,14 +130,14 @@ void MainWindow::openFile(const QString &fileName)      //use QfileDialog to get
     if (!fileInfo.isWritable())
         statusBarMsg(tr("Read-only file!"));
 
-    if (!m_graphicsView->graphLogic()->readContentFromXmlFile(m_filename))          //this is to read the content in the file
+    if (!m_graphicsView->logicControl()->readContentFromXmlFile(m_filename))          //this is to read the content in the file
     {
         m_filename = currFilename;
         return;
     }
 
 
-    ui->actionSaveAs->setEnabled(true);                      //set its states, mainly for save option and contentChanged()
+    ui->actionSave_as->setEnabled(true);                      //set its states, mainly for save option and contentChanged()
     ui->actionClose->setEnabled(true);
     ui->actionExport->setEnabled(true);
     ui->actionSave->setEnabled(false);
@@ -160,7 +160,7 @@ void MainWindow::saveFile(const bool &checkIfReadonly)   //use bool input and wr
         return;
     }
 
-    m_graphicsView->graphLogic()->writeContentToXmlFile(m_filename);     //the path to save
+    m_graphicsView->logicControl()->writeContentToXmlFile(m_filename);     //the path to save
     contentChanged(false);
 
     m_undoStack->clear();
@@ -224,7 +224,7 @@ bool MainWindow::closeFile()        //give a msgbox to choose, switch cases to g
     }
 
     ui->actionSave->setEnabled(false);
-    ui->actionSaveAs->setEnabled(false);
+    ui->actionSave_as->setEnabled(false);
     ui->actionClose->setEnabled(false);
     ui->actionExport->setEnabled(false);
     m_contentChanged = false;
@@ -248,7 +248,7 @@ void MainWindow::exportScene() // get path
 
      if (picdialog->exec())
      {
-         m_graphicsView->graphLogic()->writeContentToPngFile(
+         m_graphicsView->logicControl()->writeContentToPngFile(
                                             picdialog->selectedFiles().first());
      }
 }
@@ -319,19 +319,19 @@ void MainWindow::setupEditToolbar()
         m_undo->setShortcuts(QKeySequence::Undo);
         m_redo = m_undoStack->createRedoAction(this, tr("&Redo"));
         m_redo->setShortcuts(QKeySequence::Redo);
-        ui->menuEdit->addAction(m_undo);
-        ui->menuEdit->addAction(m_redo);
+        ui->menuView->addAction(m_undo);
+        ui->menuView->addAction(m_redo);
 
-        ui->menuEdit->addSeparator();
+        ui->menuView->addSeparator();
 
         m_undoToolbar = new QAction(tr("undo toolbar"), this);
         m_undoToolbar->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
         connect(m_undoToolbar, SIGNAL(triggered()),
                 this, SLOT (showUndoToolbar()));
 
-        ui->menuEdit->addAction(m_undoToolbar);
+        ui->menuView->addAction(m_undoToolbar);
 
-        m_graphicsView->graphLogic()->setUndoStack(m_undoStack);
+        m_graphicsView->logicControl()->setUndoStack(m_undoStack);
 }
 
 void MainWindow::setTitle(const QString &title) //clear the old path if there is no title

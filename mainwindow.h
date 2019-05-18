@@ -7,7 +7,7 @@
 #include <QUndoView>
 
 //#include "graphwidget.h"
-class GraphWidget; //改
+class WidgetControl; //改
 
 namespace Ui {
 class MainWindow;
@@ -53,7 +53,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    GraphWidget *m_graphicsView;
+    WidgetControl *m_graphicsView;
     QString m_filename;
     bool m_contentChanged;
 
