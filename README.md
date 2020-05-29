@@ -1,6 +1,9 @@
-<center><font size = 5>A LITE TOOLKIT FOR BRAINSTORMING</font></center>
-
 # BrainLine
+
+## To try our app (for macOS user only)
+
+You can donwload the app directly from the repo: https://github.com/yaozixuan/BrainLine/blob/master/BrainLine.app.zip
+You may encounter the warning: ```“BrainLine.app” cannot be opened because the developer cannot be verified.``` if you double click the app. Please go to your finder and right click, choose open.
 
 ## 1 Introduction
 
